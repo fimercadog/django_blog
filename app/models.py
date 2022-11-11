@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -6,7 +7,7 @@ from django.db import models
 class Categoria(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField('Nombre de la Categoria', max_length=100)
-    estado = models.BooleanField('Categoria Activada//Categoria no activada', default=True)
+    estado = models.BooleanField('Categoria Activada/Categoria no activada', default=True)
     fecha_creacion = models.DateField('Fecha de creacion', auto_now=False, auto_now_add=True)
 
     class Meta:
@@ -27,7 +28,7 @@ class Autor(models.Model):
     instagram = models.URLField('Instagram', null=True, blank=True)
     web = models.URLField('Github', null=True, blank=True)
     correo=models.EmailField('Correo Electronico')
-    estado=models.BooleanField('Autor Activo/NO Activo',default=True)
+    estado=models.BooleanField('Autor Activo/No Activo',default=True)
     fecha_creacion = models.DateField('Fecha de creacion',auto_now=False,auto_now_add=True)
 
     class Meta:
@@ -36,3 +37,29 @@ class Autor(models.Model):
 
     def __str__(self):
         return  "{0},{1}".format(self.apellidos,self.nombre)
+
+class Post(models.Model):
+    id = models.AutoField(primary_key=True)
+    titulo= models.CharField('Titulo', max_length=90)
+    slug = models.CharField('Slug',max_length=100)
+    descripcion = models.CharField('Descripcion',max_length=110)
+    contenido = RichTextField()
+    imagen = models.URLField(max_length=255)
+    autor = models.ForeignKey(Autor,on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria,on_delete=models.CASCADE)
+    estado = models.BooleanField('Publicado/No Publicado', default=True)
+    fecha_creacion = models.DateField('Fecha de creacion',auto_now=False, auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posts'
+
+    def __str__(self):
+        return self.titulo
+
+
+
+
+
+
+
